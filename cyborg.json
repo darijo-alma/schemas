@@ -1,4 +1,5 @@
 {
+  "description": "Lerna is a tool used in JavaScript monorepo projects. The lerna.json file is\nused to configure lerna to to best fit your project.",
   "properties": {
     "apiVersion": {
       "type": "string"
