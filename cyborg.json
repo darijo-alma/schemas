@@ -1,435 +1,381 @@
 {
-  "$ref": "#/definitions/ConfigPartSchema",
-  "definitions": {
-    "ConfigPartSchema": {
-      "allOf": [
-        {
-          "type": "object",
-          "properties": {
-            "apiVersion": {
-              "type": "string",
-              "const": "cyborg/v1"
-            },
-            "metadata": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "namespace": {
-                  "type": "string"
-                },
-                "labels": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": [
-                "name"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "apiVersion",
-            "metadata"
-          ]
-        },
-        {
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Parameters"
-                },
-                "spec": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": [
-                          "string",
-                          "number",
-                          "boolean"
-                        ]
-                      },
-                      {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/0/properties/spec/additionalProperties/anyOf/0"
-                        }
-                      }
-                    ]
-                  }
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Secrets"
-                },
-                "spec": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/0/properties/spec/additionalProperties/anyOf/0"
-                  }
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "FeatureFlags"
-                },
-                "spec": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "boolean"
-                      },
-                      {
-                        "type": "string",
-                        "const": "true"
-                      },
-                      {
-                        "type": "string",
-                        "const": "false"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  }
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Components"
-                },
-                "spec": {
-                  "type": "object",
-                  "properties": {
-                    "client": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "path": {
-                                "type": "string"
-                              },
-                              "isLazy": {
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "path"
-                            ],
-                            "additionalProperties": false
-                          }
-                        ]
-                      }
-                    },
-                    "server": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "path": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "path"
-                            ],
-                            "additionalProperties": false
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Plugins"
-                },
-                "spec": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "pattern": "^\\@"
-                          },
-                          "enabled": {
-                            "type": "boolean"
-                          },
-                          "path": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "name",
-                          "enabled",
-                          "path"
-                        ],
-                        "additionalProperties": false
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "enabled": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": [
-                          "enabled"
-                        ],
-                        "additionalProperties": false
-                      }
-                    ]
-                  }
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Routes"
-                },
-                "spec": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object",
-                    "properties": {
-                      "targetPath": {
-                        "type": "string",
-                        "pattern": "^\\/"
-                      },
-                      "path": {
-                        "type": "object",
-                        "properties": {
-                          "en": {
-                            "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
-                          },
-                          "sk": {
-                            "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
-                          },
-                          "cs": {
-                            "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
-                          },
-                          "de": {
-                            "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
-                          },
-                          "hr": {
-                            "$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
-                          }
-                        },
-                        "required": [
-                          "en",
-                          "sk",
-                          "cs",
-                          "de",
-                          "hr"
-                        ],
-                        "additionalProperties": false
-                      },
-                      "args": {
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string",
-                          "enum": [
-                            "string",
-                            "number"
-                          ]
-                        }
-                      },
-                      "meta": {
-                        "type": "object",
-                        "properties": {
-                          "authRequired": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": [
-                          "authRequired"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "required": [
-                      "targetPath",
-                      "path"
-                    ],
-                    "additionalProperties": false
-                  }
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string",
-                  "const": "Dependencies"
-                },
-                "spec": {
-                  "type": "object",
-                  "properties": {
-                    "parameters": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "secrets": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "featureFlags": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "plugins": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "components": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "object",
-                        "properties": {
-                          "props": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "object",
-                                "additionalProperties": {
-                                  "type": "string"
-                                }
-                              }
-                            ]
-                          },
-                          "imports": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "props"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "routes": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "anyOf": [
-                          {
-                            "anyOf": [
-                              {
-                                "type": "null"
-                              },
-                              {
-                                "type": "object",
-                                "additionalProperties": {
-                                  "type": "string"
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "const": "*"
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              },
-              "required": [
-                "kind",
-                "spec"
-              ],
-              "additionalProperties": false
-            }
-          ]
-        }
-      ]
-    }
-  },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+	"$ref": "#/definitions/ConfigPartSchema",
+	"definitions": {
+		"ConfigPartSchema": {
+			"allOf": [
+				{
+					"type": "object",
+					"properties": {
+						"apiVersion": {
+							"type": "string",
+							"const": "cyborg/v1",
+							"description": "The version of the API"
+						},
+						"metadata": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"namespace": {
+									"type": "string"
+								},
+								"labels": {
+									"type": "object",
+									"additionalProperties": {
+										"type": "string"
+									}
+								}
+							},
+							"required": ["name"],
+							"additionalProperties": false,
+							"description": "The metadata of the configuration part"
+						}
+					},
+					"required": ["apiVersion", "metadata"]
+				},
+				{
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Parameters"
+								},
+								"spec": {
+									"type": "object",
+									"additionalProperties": {
+										"anyOf": [
+											{
+												"type": ["string", "number", "boolean"]
+											},
+											{
+												"type": "array",
+												"items": {
+													"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/0/properties/spec/additionalProperties/anyOf/0"
+												}
+											}
+										]
+									}
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Secrets"
+								},
+								"spec": {
+									"type": "object",
+									"additionalProperties": {
+										"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/0/properties/spec/additionalProperties/anyOf/0"
+									}
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "FeatureFlags"
+								},
+								"spec": {
+									"type": "object",
+									"additionalProperties": {
+										"anyOf": [
+											{
+												"type": "boolean"
+											},
+											{
+												"type": "string",
+												"const": "true"
+											},
+											{
+												"type": "string",
+												"const": "false"
+											},
+											{
+												"type": "string"
+											}
+										]
+									}
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Components"
+								},
+								"spec": {
+									"type": "object",
+									"properties": {
+										"client": {
+											"type": "object",
+											"additionalProperties": {
+												"anyOf": [
+													{
+														"type": "string"
+													},
+													{
+														"type": "object",
+														"properties": {
+															"path": {
+																"type": "string"
+															},
+															"isLazy": {
+																"type": "boolean"
+															}
+														},
+														"required": ["path"],
+														"additionalProperties": false
+													}
+												]
+											}
+										},
+										"server": {
+											"type": "object",
+											"additionalProperties": {
+												"anyOf": [
+													{
+														"type": "string"
+													},
+													{
+														"type": "object",
+														"properties": {
+															"path": {
+																"type": "string"
+															}
+														},
+														"required": ["path"],
+														"additionalProperties": false
+													}
+												]
+											}
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Plugins"
+								},
+								"spec": {
+									"type": "object",
+									"additionalProperties": {
+										"anyOf": [
+											{
+												"type": "object",
+												"properties": {
+													"name": {
+														"type": "string",
+														"pattern": "^\\@"
+													},
+													"enabled": {
+														"type": "boolean"
+													},
+													"path": {
+														"type": "string"
+													}
+												},
+												"required": ["name", "enabled", "path"],
+												"additionalProperties": false
+											},
+											{
+												"type": "object",
+												"properties": {
+													"enabled": {
+														"type": "boolean"
+													}
+												},
+												"required": ["enabled"],
+												"additionalProperties": false
+											}
+										]
+									}
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Routes"
+								},
+								"spec": {
+									"type": "object",
+									"additionalProperties": {
+										"type": "object",
+										"properties": {
+											"targetPath": {
+												"type": "string",
+												"pattern": "^\\/"
+											},
+											"path": {
+												"type": "object",
+												"properties": {
+													"en": {
+														"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
+													},
+													"sk": {
+														"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
+													},
+													"cs": {
+														"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
+													},
+													"de": {
+														"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
+													},
+													"hr": {
+														"$ref": "#/definitions/ConfigPartSchema/allOf/1/anyOf/5/properties/spec/additionalProperties/properties/targetPath"
+													}
+												},
+												"required": ["en", "sk", "cs", "de", "hr"],
+												"additionalProperties": false
+											},
+											"args": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string",
+													"enum": ["string", "number"]
+												}
+											},
+											"meta": {
+												"type": "object",
+												"properties": {
+													"authRequired": {
+														"type": "boolean"
+													}
+												},
+												"required": ["authRequired"],
+												"additionalProperties": false
+											}
+										},
+										"required": ["targetPath", "path"],
+										"additionalProperties": false
+									}
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"type": "string",
+									"const": "Dependencies"
+								},
+								"spec": {
+									"type": "object",
+									"properties": {
+										"parameters": {
+											"type": "object",
+											"additionalProperties": {
+												"type": "string"
+											}
+										},
+										"secrets": {
+											"type": "object",
+											"additionalProperties": {
+												"type": "string"
+											}
+										},
+										"featureFlags": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"plugins": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"components": {
+											"type": "object",
+											"additionalProperties": {
+												"type": "object",
+												"properties": {
+													"props": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "object",
+																"additionalProperties": {
+																	"type": "string"
+																}
+															}
+														]
+													},
+													"imports": {
+														"type": "string"
+													}
+												},
+												"required": ["props"],
+												"additionalProperties": false
+											}
+										},
+										"routes": {
+											"type": "object",
+											"additionalProperties": {
+												"anyOf": [
+													{
+														"anyOf": [
+															{
+																"type": "null"
+															},
+															{
+																"type": "object",
+																"additionalProperties": {
+																	"type": "string"
+																}
+															}
+														]
+													},
+													{
+														"type": "string",
+														"const": "*"
+													}
+												]
+											}
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"required": ["kind", "spec"],
+							"additionalProperties": false
+						}
+					]
+				}
+			]
+		}
+	},
+	"$schema": "http://json-schema.org/draft-07/schema#"
 }
