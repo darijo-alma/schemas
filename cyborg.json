@@ -28,7 +28,6 @@
 								}
 							},
 							"required": ["name"],
-							"additionalProperties": false,
 							"description": "The metadata of the configuration part"
 						}
 					},
